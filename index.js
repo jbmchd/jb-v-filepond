@@ -1,3 +1,4 @@
-let Vue = window.Vue
+import Vue from 'vue'
 
-Vue.component('jb-filepond', require('./JbFilePond.vue').default);
+import JbFilePond from './JbFilePond.vue'
+Vue.component('jb-filepond', JbFilePond)

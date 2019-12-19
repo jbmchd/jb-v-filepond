@@ -1,5 +1,5 @@
 <template>
-
+ 
     <file-pond
         ref="pond"
         :id="id"
