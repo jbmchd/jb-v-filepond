@@ -8,7 +8,6 @@
     :allow-multiple="multiple || maxFiles > 1"
     :allow-file-type-validation="permitirValidacaoPorTipo"
     :acceptedFileTypes="acceptedFileTypes"
-    
     :include-styling="false"
     imagePreviewMaxHeight="128"
     :label-idle="label"
@@ -23,7 +22,6 @@
       fileValidateTypeLabelExpectedTypes
     "
     @init="init"
-    
   />
 </template>
 
@@ -48,8 +46,8 @@ export default {
   props: {
     csrf: String,
 
-    urlBase: { type: String, default: '/' },
-    url: { type: String, default: 'arquivos' },
+    urlBase: String,
+    url: String,
     urlParteDeletar: { type: String, default: 'deletar' },
     ativarHttp: { type: Boolean, default: true },
 
@@ -102,12 +100,21 @@ export default {
   },
   computed: {
     url_process() {
-      return `${this.url_base}/${this.url_data}`
+      let url = this.url_data
+      if (this.url_base) {
+        url = `${this.url_base}/${this.url_data}`
+      }
+
+      return url
     },
     url_deletar() {
-      return `${this.url_base}/${this.url_data}/${this.urlParteDeletar}`
+      let url = this.url_data
+      if (this.url_base) {
+        url = `${this.url_base}/${this.url_data}`
+      }
+      return `${url}/${this.urlParteDeletar}`
     },
-    permitirValidacaoPorTipo(){
+    permitirValidacaoPorTipo() {
       return true || !!this.$attrs['accepted-file-types']
     }
   },
@@ -119,7 +126,6 @@ export default {
   methods: {
     init() {
       console.log('FilePond foi iniciado e adicionado em `this.$refs.filepond`')
-      
     },
     process(fieldName, file, metadata, load, error, progress, abort) {
       const data = Object.assign(new FormData(), this.value)
