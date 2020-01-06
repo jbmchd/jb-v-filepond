@@ -44,6 +44,7 @@ const FilePond = vueFilePond(
 export default {
   components: { FilePond },
   props: {
+    data: Object,
     csrf: String,
 
     urlBase: String,
@@ -128,7 +129,8 @@ export default {
       console.log('FilePond foi iniciado e adicionado em `this.$refs.filepond`')
     },
     process(fieldName, file, metadata, load, error, progress, abort) {
-      const data = Object.assign(new FormData(), this.value)
+
+      const data = Object.assign(new FormData(), this.data, this.value)
       data.append(fieldName, file, file.name)
 
       const CancelToken = axios.CancelToken
@@ -141,7 +143,7 @@ export default {
         headers: { 'Content-Type': 'multipart/form-data' },
         cancelToken: source.token
       }
-
+    
       axios
         .post(this.url_process, data, config)
         .then(response => {
@@ -256,8 +258,6 @@ export default {
       let file_id = data.id || Date.now()
 
       if (origem == 'load') {
-        console.log('load aki')
-
         let url = decodeURIComponent(data.url)
         file_id = url.split('/').pop()
         let caminho_completo = url.substr(url.search(this.storagePath))
