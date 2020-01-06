@@ -129,9 +129,11 @@ export default {
       console.log('FilePond foi iniciado e adicionado em `this.$refs.filepond`')
     },
     process(fieldName, file, metadata, load, error, progress, abort) {
-
-      const data = Object.assign(new FormData(), this.data, this.value)
+      let data = Object.assign(new FormData(), this.value)
       data.append(fieldName, file, file.name)
+      for (const key in this.data) {
+        data.append(key, this.data[key])
+      }
 
       const CancelToken = axios.CancelToken
       const source = CancelToken.source()
@@ -143,7 +145,7 @@ export default {
         headers: { 'Content-Type': 'multipart/form-data' },
         cancelToken: source.token
       }
-    
+
       axios
         .post(this.url_process, data, config)
         .then(response => {
